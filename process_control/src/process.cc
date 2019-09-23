@@ -1,6 +1,7 @@
 #include "process.h"
 #include <iostream>
 #include <glog/logging.h>
+
 using namespace google;
 using namespace std;
 
@@ -26,7 +27,7 @@ void Process::init() {
     MemNode *init_node(new MemNode);
     int begin, size;
     cin >> begin >> size;
-    init_node -> set(begin, size - begin);
+    init_node -> set(begin, size + begin);
     free_.insertAsLast(*init_node);
 }
 
@@ -283,8 +284,7 @@ int main(int argc, char *argv[]) {
             default:continue;
         }
     }
-    
-        
+    delete p;
     // Pcb *p(new Pcb())
     return 0;
 }
