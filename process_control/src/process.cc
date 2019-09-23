@@ -1,6 +1,15 @@
+/*
+* Process Control
+* Simulate operating system kernel management of processes and simple memory management.
+* Memory Management Algorithm: Best Fit algorithm 
+* Author: m0dulo
+* Conact: cuckooegret@gmail.com
+*/
+
 #include "process.h"
 #include <iostream>
 #include <glog/logging.h>
+
 
 using namespace google;
 using namespace std;
