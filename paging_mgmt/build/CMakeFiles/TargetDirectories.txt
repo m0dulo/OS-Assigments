@@ -1,4 +1,0 @@
-/mnt/c/Users/cucko/Desktop/OS-Assigments/paging_mgmt/build/CMakeFiles/rebuild_cache.dir
-/mnt/c/Users/cucko/Desktop/OS-Assigments/paging_mgmt/build/CMakeFiles/edit_cache.dir
-/mnt/c/Users/cucko/Desktop/OS-Assigments/paging_mgmt/build/CMakeFiles/paging_mgmt.dir
-/mnt/c/Users/cucko/Desktop/OS-Assigments/paging_mgmt/build/CMakeFiles/BitMap.dir

@@ -1,1 +1,0 @@
-/usr/bin/c++   -g -w -msse3 -funroll-loops  -std=c++11 -O0 -pg -g   CMakeFiles/paging_mgmt.dir/src/mgmt.cc.o  -o ../bin/paging_mgmt libBitMap.a -Wl,-Bstatic -lglog -Wl,-Bdynamic -lpthread 
