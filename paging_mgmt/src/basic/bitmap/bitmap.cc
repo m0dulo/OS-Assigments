@@ -6,7 +6,7 @@
 
 void BitMap::init(int len) {
     this -> btmp_len_ = len;
-    bytes_ = new uint8_t;
+    bytes_ = new uint8_t[btmp_len_];
     memset(this -> bytes_, 0xff, this -> btmp_len_);
 }
 
@@ -55,10 +55,12 @@ int BitMap::size() {
  }
 
  void BitMap::destory() {
-     delete bytes_;
+     delete []bytes_;
+     this -> bytes_ = nullptr;
  }
 
  void BitMap::show() {
+     assert(bytes_ != nullptr);
      for (int i = 0; i < btmp_len_ ; ++i) {
          std::bitset<sizeof(uint8_t) * 8> bs(bytes_[i]);
          std::cout << bs << std::endl;

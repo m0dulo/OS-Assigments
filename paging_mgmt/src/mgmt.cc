@@ -6,7 +6,7 @@ using namespace std;
 
 int main(int argc, char *argv[]) {
     BitMap map;
-    map.init(5);
+    map.init(6);
     map.set(5,0);
     map.set(18,0);
     map.set(0,0);
@@ -17,6 +17,7 @@ int main(int argc, char *argv[]) {
     for (auto idx : idxs) {
         cout << idx << endl;
     }
+    map.destory();
     return 0;
 }
 
