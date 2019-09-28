@@ -10,6 +10,6 @@ Operating System Assigments.
 | Project | Overview|  
 | :----: | :----: |
 | [Process Control](https://github.com/m0dulo/OS-Assigments/tree/master/process_control) |Simulate operating system kernel management of processes and simple memory management. |
-| coming soon... | coming soon... |
+| [Paging Management](https://github.com/m0dulo/OS-Assigments/tree/master/paging_mgmt) | coming soon... |
 ---
 If you have any question, feel free to send an email to cuckooegret@gmail.com
