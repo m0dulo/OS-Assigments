@@ -5,7 +5,7 @@
 #include <bitset>
 
 void BitMap::init(int len) {
-    this -> btmp_len_ = len;
+    this -> btmp_len_ = len / 8;
     bytes_ = new uint8_t[btmp_len_];
     memset(this -> bytes_, 0xff, this -> btmp_len_);
 }
