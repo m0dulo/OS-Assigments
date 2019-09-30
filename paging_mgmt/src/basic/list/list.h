@@ -9,11 +9,12 @@
 template <typename T> 
 class List {
 private:
-    int size_ = 0;
     ListNode<T> *header_;
     ListNode<T> *trailer_;
 
 protected:
+
+    int size_ = 0;
     void init();
     int clear();
 
@@ -32,6 +33,10 @@ public:
         return header_ -> succ_;
     }
 
+    ListNode<T> *last() const {
+        return trailer_ -> pred_;
+    }
+
      ListNode<T> *operator[] ( int r ) const;
 
     ListNode<T> *insertAsFirst(T const &e);
@@ -45,9 +50,11 @@ public:
     ListNode<T> *search_size(int n, ListNode<T> *p) const;
     ListNode<T> *search_addr(int n, ListNode<T> *p) const;
 
-    int find(std::string s) const;
+    bool check(T data);
 
     void sort(int flag);
+
+    int find(T data) const;
 
 
 
