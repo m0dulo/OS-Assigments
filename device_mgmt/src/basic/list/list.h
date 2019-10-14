@@ -37,7 +37,16 @@ public:
         return trailer_ -> pred_;
     }
 
-     ListNode<T> *operator[] ( int r ) const;
+    T &dfirst()const {
+        return  header_ -> succ_ -> data_;
+    }
+
+    T &back() const {
+        return trailer_-> pred_ -> data_;
+    }
+
+
+    ListNode<T> *operator[] ( int r ) const;
 
     ListNode<T> *insertAsFirst(T const &e);
     ListNode<T> *push_back(T const &e);
@@ -50,11 +59,11 @@ public:
     ListNode<T> *search_size(int n, ListNode<T> *p) const;
     ListNode<T> *search_addr(int n, ListNode<T> *p) const;
 
-    bool check(T data);
+    bool check(std::string);
 
     void sort(int flag);
 
-    int find(T data) const;
+    int find(std::string) const;
 
 
 

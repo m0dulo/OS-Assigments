@@ -6,11 +6,11 @@
 
 template <typename T> 
 
-bool List<T>::check(T data)  {
+bool List<T>::check(std::string name)  {
     int rank = 0;
     int flag = 0;
     for (; rank < size(); rank++) {
-        if(data == (*this)[rank] -> data_) {
+        if(name == (*this)[rank] -> data_.node_name) {
             flag = 1;
             break;
         }
@@ -20,10 +20,10 @@ bool List<T>::check(T data)  {
 }
 
 template <typename T> 
-int List<T>::find(T data) const {
+int List<T>::find(std::string name) const {
     int rank = 0;
     for (; rank < size(); rank++) {
-        if(data == (*this)[rank] -> data_)
+        if(name == (*this)[rank] -> data_.node_name)
             break;
     }
     return rank;

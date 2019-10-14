@@ -4,6 +4,7 @@
 #pragma once;
 
 #include "list.h"
+#include "list_node.h"
 
 template <typename T>
 void List<T>::init() {

@@ -9,10 +9,12 @@ class Pcb {
 private:
     std::string pcb_name_;
 public:
-    void set_name(std::string n) {
+    Pcb(){}
+    Pcb(std::string n) : pcb_name_(n) {}
+    void init(std::string n) {
         pcb_name_ = n;
     }
-    std::string get_name() {
+    std::string get() const {
         return pcb_name_;
     }
 };

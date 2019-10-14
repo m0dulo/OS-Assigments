@@ -11,7 +11,7 @@ public:
     ListNode<T> *pred_;
     ListNode<T> *succ_;
     
-    ListNode() = default;
+    ListNode() {};
     ListNode(T e, ListNode<T> *p, ListNode<T> *s)
             : data_(e), pred_(p), succ_(s) {}
 
