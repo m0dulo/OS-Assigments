@@ -3,14 +3,14 @@
 
 #pragma once;
 
-#include "node.h"
+#include "nodes.h"
 
 class Mgmt {
+private:
+    List<ChNode> chct;
+    List<CoNode> coct;
+    List<DcNode> dct;
 public:
-    List<Node> chct;
-    List<Node> coct;
-    List<Node> dct;
-
     void init();
     void helper();
     void show();

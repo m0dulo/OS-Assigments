@@ -14,7 +14,7 @@ public:
     void init(std::string n) {
         pcb_name_ = n;
     }
-    std::string get() const {
+    std::string get_name() const {
         return pcb_name_;
     }
 };

@@ -23,7 +23,7 @@ template <typename T>
 int List<T>::find(std::string name) const {
     int rank = 0;
     for (; rank < size(); rank++) {
-        if(name == (*this)[rank] -> data_.node_name)
+        if(name == (*this)[rank] -> data_.get_name())
             break;
     }
     return rank;

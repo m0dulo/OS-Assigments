@@ -7,17 +7,22 @@
 using namespace std;
 
 void Mgmt::helper() {
-    cout<<"c.添加设备------------------命令:c"<<endl;
-    cout<<"d.删除设备------------------命令:d"<<endl;	
-    cout<<"a.申请设备------------------命令:a"<<endl;
-    cout<<"r.归还设备------------------命令:r"<<endl;
-    cout<<"i.申请一类设备(设备独立性)--命令:i"<<endl;
-    cout<<"s.状态显示------------------命令:s"<<endl;
-    cout<<"h.显示帮助------------------命令:h"<<endl;
+    cout << endl;
+    cout <<"\t+++++++++++++++*HELPER*+++++++++++++"<<endl;
+    cout<<"\t|c.添加设备------------------命令:c|"<<endl;
+    cout<<"\t|d.删除设备------------------命令:d|"<<endl;	
+    cout<<"\t|a.申请设备------------------命令:a|"<<endl;
+    cout<<"\t|r.归还设备------------------命令:r|"<<endl;
+    cout<<"\t|n.撤销进程------------------命令:n|"<<endl;
+    cout<<"\t|i.申请一类设备(设备独立性)--命令:i|"<<endl;
+    cout<<"\t|s.状态显示------------------命令:s|"<<endl;
+    cout<<"\t|h.显示帮助------------------命令:h|"<<endl;
+    cout<<"\t|q.退出程序------------------命令:q|"<<endl;
+    cout <<"\t++++++++++++++++++++++++++++++++++++"<<endl;
 }
 
 void Mgmt::init() {
-    Node *ch = new Node[2];
+    ChNode *ch = new ChNode[2];
     for (int i = 0; i < 2; ++i) {
         string idx = to_string(i + 1);
         ch[i].set_rank(1);
@@ -26,7 +31,7 @@ void Mgmt::init() {
     }
     delete []ch;
 
-    Node *co = new Node[3];
+    CoNode *co = new CoNode[3];
     for (int i = 0; i < 3; ++i) {
         string idx = to_string(i + 1);
         co[i].set_rank(2);
@@ -35,7 +40,7 @@ void Mgmt::init() {
     }
     delete []co;
 
-    Node *dc = new Node[4];
+    DcNode *dc = new DcNode[4];
     for (int i = 0; i < 4; ++i) {
         dc[i].set_rank(3);
         dct.push_back(dc[i]);
@@ -51,21 +56,24 @@ void Mgmt::init() {
     dct[3]->data_.set_type('O');
 
     coct[0] ->data_.set_parent(chct[0]->data_);
-    coct[1] ->data_.set_parent(chct[1]->data_);
-    coct[2] ->data_.set_parent(chct[1]->data_);
-
     chct[0]->data_.add_child(coct[0]->data_);
+
+    coct[1] ->data_.set_parent(chct[1]->data_);
     chct[1]->data_.add_child(coct[1] ->data_);
+
+    coct[2] ->data_.set_parent(chct[1]->data_);
     chct[1]->data_.add_child(coct[2] ->data_);
 
     dct[0] ->data_.set_parent(coct[0]->data_);
-    dct[1] ->data_.set_parent(coct[0]->data_);
-    dct[2] ->data_.set_parent(coct[1]->data_);
-    dct[3] ->data_.set_parent(coct[2]-> data_);
-
     coct[0]->data_.add_child(dct[0] ->data_);
+
+    dct[1] ->data_.set_parent(coct[0]->data_);
     coct[0]->data_.add_child(dct[1] ->data_);
+
+    dct[2] ->data_.set_parent(coct[1]->data_);
     coct[1]->data_.add_child(dct[2] ->data_);
+    
+    dct[3] ->data_.set_parent(coct[2]-> data_);
     coct[2]->data_.add_child(dct[3] ->data_);
 }
 
@@ -80,7 +88,7 @@ void Mgmt::add_dc() {
     cout << "请输入设备属性(I/O)：" << endl << "> ";
     cin >> dc_type;
     for (int i = 0; i < dct.size(); ++i) {
-        if (dc_name == dct[i] ->data_.node_name) {
+        if (dc_name == dct[i] ->data_.get_name()) {
             dc_flag = 1;
             break;
         }
@@ -89,7 +97,7 @@ void Mgmt::add_dc() {
         cout << "设备已经存在！添加设备失败！" << endl;
         add_dc();
     } else if (dc_flag == 0) {
-        Node *dc = new Node;
+        DcNode *dc = new DcNode;
         dc ->init(dc_name);
         dc -> set_type(dc_type);
         dct.push_back(*dc);
@@ -108,28 +116,28 @@ void Mgmt::add_co() {
         string name;
         cin >> name;
         for(int i = 0; i < coct.size(); ++i) {
-            if (name == coct[i]->data_.node_name) {
+            if (name == coct[i]->data_.get_name()) {
                 flag = 1;
                 break;
             }
         }
         if (flag == 1) {
-            cout << "设备已经存在！添加设备失败！" << endl;
+            cout << "\t设备已经存在！添加设备失败！" << endl;
             add_co(); 
         } else if (flag == 0) {
-            Node *co = new Node;
+            CoNode *co = new CoNode;
             co -> init(name);
             coct.push_back(*co);
             dct.back().set_parent(coct.back());
             coct.back().add_child(dct.back());
-            // dct[dct.size() - 1]->data_.parent = &(coct[coct.size() - 1]->data_);
+
             string ch_name;
             cout << "请输入新设备要挂载的通道名称:" << endl << "> ";
             cin >> ch_name;
             int r = chct.find(ch_name);
             coct.back().set_parent(chct[r]->data_);
-            chct[r]->data_.add_child(coct.back());
-            //coct[coct.size() - 1]->data_.parent = &(chct[r]->data_);           
+            chct[r]->data_.add_child(coct.back());   
+            cout << "\t添加新设备成功！" << endl << endl;    
         }   
     } else if (cmd == 'N') {
         string n_name;
@@ -137,18 +145,20 @@ void Mgmt::add_co() {
         cin >> n_name;
         int r = coct.find(n_name);
         dct.back().set_parent(coct[r]->data_);
-        //dct[dct.size() - 1]->data_.parent = &(coct[r]->data_);
+        coct[r]->data_.add_child(dct.back());
+        cout << "\t添加新设备成功！" << endl << endl;
     }
 }
 
 void Mgmt::show() {
+    cout << endl;
     cout << "|--------------------------------------通道----------------------------------------|" << endl;
     for (int i = 0; i < chct.size(); ++i) {
-        Node node = chct[i] -> data_;
-        cout << "\t" << "  通道名称:" << node.node_name << " ";
+        ChNode node = chct[i] -> data_;
+        cout << "\t" << "  通道名称:" << node.get_name() << " ";
         cout << "连接的控制器名称: ";
          for (int j = 0; j < node.childs.size(); ++j) {
-            cout << (node.childs[j]) -> node_name << " ";
+            cout << (node.childs[j]) -> get_name() << " ";
         }
         cout << endl;
      }
@@ -158,13 +168,13 @@ void Mgmt::show() {
 
      cout << "|-------------------------------------控制器---------------------------------------|" << endl;
     for (int i = 0; i < coct.size(); ++i) {
-        Node node = coct[i] -> data_;
-        cout << "\t" << "  控制器名称:" << node.node_name << " ";
+        CoNode node = coct[i] -> data_;
+        cout << "\t" << "  控制器名称:" << node.get_name()<< " ";
         cout << "连接的设备名称:";
         for (int j = 0; j < node.childs.size(); ++j) {
-            cout << (node.childs[j]) -> node_name << " ";
+            cout << (node.childs[j]) -> get_name() << " ";
         }
-        cout << "\t"<<"所属通道:" << node.parent->node_name;
+        cout << "\t"<<"所属通道:" << node.parent-> get_name();
         cout << endl;
      }
 
@@ -172,9 +182,9 @@ void Mgmt::show() {
      cout << endl;
      cout << "|--------------------------------------设备----------------------------------------|" << endl;
     for (int i = 0; i < dct.size(); ++i) {
-        Node node = dct[i] -> data_;
-        cout << "\t" << "  设备名称:" << node.node_name << "(" << node.type << ")";
-        cout << "\t" << "所属控制器:" << node.parent->node_name;
+        DcNode node = dct[i] -> data_;
+        cout << "\t" << "  设备名称:" << node.get_name() << "(" << node.get_type() << ")";
+        cout << "\t" << "所属控制器:" << node.parent->get_name();
         cout << endl;
      }
 
