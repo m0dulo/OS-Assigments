@@ -66,6 +66,7 @@ public:
     void sort(int flag);
 
     int find(std::string) const;
+    int find_type(std::string name) const;
 
 };
 

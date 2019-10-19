@@ -33,4 +33,16 @@ int List<T>::find(std::string name) const {
     }
 }
 
+template <typename T> 
+int List<T>::find_type(std::string name) const {
+    if (size_ > 0) {
+        int rank = 0;
+        for (; rank < size(); rank++) {
+            if(name == (*this)[rank] -> data_->get_type())
+            break;
+        }
+        return rank;
+    }
+}
+
 #endif // SRC_BASIC_LIST_FIND_H_

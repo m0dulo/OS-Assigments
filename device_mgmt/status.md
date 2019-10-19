@@ -85,7 +85,7 @@ digraph G {
 }
 ```
 
-# a P1 KB
+# a KB P1
 
 ```dot
 digraph G {
@@ -171,7 +171,7 @@ digraph G {
 }
 ```
 
-# a P2 KB
+# a KB P2
 ```dot
 digraph G {
    node [fontname = "Consolas"]
@@ -256,7 +256,7 @@ digraph G {
 }
 ```
 
-# a P3 MOUSE
+# a MOUSE P3
 ```dot
 digraph G {
    node [fontname = "Consolas"]
@@ -341,7 +341,7 @@ digraph G {
 }
 ```
 
-# a P1 PTR
+# a PTR P1
 ```dot
 digraph G {
    node [fontname = "Consolas"]
@@ -426,7 +426,7 @@ digraph G {
 }
 ```
 
-# a P4 MOR
+# a MOR P4
 ```dot
 digraph G {
    node [fontname = "Consolas"]
@@ -596,7 +596,7 @@ digraph G {
     MOR -> MORB
 }
 ```
-# n P1
+# t P1
 ```dot
 digraph G {
    node [fontname = "Consolas"]
@@ -680,7 +680,7 @@ digraph G {
     MOR -> MORB
 }
 ```
-# a P5 MOUSE
+# a MOUSE P5
 
 ```dot
 digraph G {
@@ -766,7 +766,7 @@ digraph G {
 }
 ```
 
-# a P6 MOUSE
+# a MOUSE P6
 
 ```dot
 digraph G {
@@ -938,7 +938,7 @@ digraph G {
 }
 ```
 
-# c P5 PTR
+# a PTR P5
 
 ```dot
 digraph G {
@@ -1023,7 +1023,7 @@ digraph G {
     MOR -> MORB
 }
 ```
-# n P5
+# t P5
 
 ```dot
 digraph G {
@@ -1109,7 +1109,7 @@ digraph G {
 }
 ```
 
-# c LYX I CO4 CH1
+# c m0dulo I CO4 CH1
 
 ```dot
 digraph G {

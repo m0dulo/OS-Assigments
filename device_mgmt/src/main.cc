@@ -19,9 +19,9 @@ void Mgmt::helper() {
     cout<<"\t|c.添加设备------------------命令:c|"<<endl;
     cout<<"\t|d.删除设备------------------命令:d|"<<endl;	
     cout<<"\t|a.申请设备------------------命令:a|"<<endl;
-    cout<<"\t|r.归还设备------------------命令:r|"<<endl;
+    cout<<"\t|r.释放设备------------------命令:r|"<<endl;
     cout<<"\t|i.申请一类设备(设备独立性)--命令:i|"<<endl;
-    cout<<"\t|n.撤销进程------------------命令:n|"<<endl;
+    cout<<"\t|t.撤销进程------------------命令:t|"<<endl;
     cout<<"\t|k.进程状态------------------命令:k|"<<endl;
     cout<<"\t|s.分配状态------------------命令:s|"<<endl;
     cout<<"\t|h.显示帮助------------------命令:h|"<<endl;
@@ -153,7 +153,7 @@ void Mgmt::add_co() {
     }
 }
 
-void Mgmt::apply() {
+void Mgmt::apply(string dc_name) {
     cout << "请输入进程名:" << endl << "> ";
     string pcb_name;
     cin >> pcb_name;
@@ -162,9 +162,6 @@ void Mgmt::apply() {
     if(!ready.check(pcb_name)) {
         ready.push_back(pcb);
     }
-    cout << "请输入所申请的设备名:" << endl << "> ";
-    string dc_name;
-    cin >> dc_name;
     int r = dct.find(dc_name);
     if (dct[r] ->data_ -> process == nullptr) {
         dct[r] ->data_ -> process = pcb;
@@ -204,8 +201,171 @@ void Mgmt::apply() {
     }
 }
 
-void Mgmt::release() {
-    
+void Mgmt::release(string dc_name) {
+    if (!dct.check(dc_name)) {
+        cout << RED << "没有这个设备，释放设备失败！" << WHITE << endl;
+        return;
+    }
+    string pro_name;
+    int r = dct.find(dc_name);
+    int c = 0;
+    bool b_assigned = false;
+    for (; c < dct.size(); ++c) {
+        if (c == r) continue;
+        if (dct[c] -> data_ -> process != nullptr) {
+            if (dct[r] -> data_ -> process -> get_name() == dct[c] -> data_ -> process -> get_name()) {
+                b_assigned = true;
+                break;
+            }
+        }
+    }
+    if (dct[r] -> data_ -> waiting_list.size() == 0) {
+        if (!b_assigned) {
+            dct[r] -> data_ -> process -> set_ready();
+            int d = blocking.find(dct[r] ->data_-> process ->get_name());
+            blocking.remove(blocking[d]);
+            if (!ready.check(dct[r] -> data_ -> process -> get_name()) || ready.size() == 0) {
+                ready.push_back(dct[r] -> data_ -> process);
+            }
+        }
+        pro_name = dct[r] -> data_ -> process -> get_name();
+        dct[r] -> data_ -> process = nullptr;
+    } else {
+        if (!b_assigned) {
+            dct[r] -> data_ -> process -> set_ready();
+            int d = blocking.find(dct[r] ->data_-> process ->get_name());
+            blocking.remove(blocking[d]);
+            if (!ready.check(dct[r] -> data_ -> process -> get_name()) || ready.size() == 0) {
+                ready.push_back(dct[r] -> data_ -> process);
+            }
+        }
+        pro_name = dct[r] -> data_ -> process -> get_name();
+        dct[r] -> data_ -> process = nullptr;
+        dct[r] -> data_ -> process = dct[r] -> data_ -> waiting_list.first() -> data_;
+        dct[r] -> data_ -> waiting_list.dequeue();
+
+        if (dct[r] -> data_ -> parent -> process == nullptr) {
+            dct[r] -> data_ -> parent -> process = dct[r] -> data_ -> process;
+        } else {
+            dct[r] -> data_ ->parent -> waiting_list.enqueue(dct[r] -> data_ -> process);
+        }
+    }
+    if (dct[r] -> data_ -> parent -> waiting_list.check(pro_name)) {
+                int rr = dct[r] -> data_ -> parent -> waiting_list.find(pro_name);
+                dct[r] -> data_ -> parent -> waiting_list.remove(dct[r] -> data_ -> parent -> waiting_list[rr]);
+    }
+
+    if (dct[r] -> data_ -> parent -> process -> get_name() == pro_name) {
+        if (dct[r] -> data_ -> parent -> waiting_list.size() == 0) {
+            dct[r] -> data_ -> parent -> process = nullptr;
+        } else {
+            dct[r] -> data_ -> parent -> process = nullptr;
+            dct[r] -> data_ -> parent -> process = dct[r] -> data_ -> parent -> waiting_list.first() -> data_;
+            dct[r] -> data_ -> parent -> waiting_list.dequeue();
+
+            if (dct[r] -> data_ -> parent -> parent -> process == nullptr) {
+                dct[r] -> data_ -> parent -> parent -> process = dct[r] -> data_ -> parent -> process;
+            } else {
+                dct[r] -> data_ ->parent -> parent -> waiting_list.enqueue(dct[r] -> data_ -> parent -> process);
+            }
+        }
+        if (dct[r] -> data_ -> parent -> parent -> waiting_list.check(pro_name)) {
+                    int rr = dct[r] -> data_ -> parent -> parent -> waiting_list.find(pro_name);
+                    dct[r] -> data_ -> parent -> parent -> waiting_list.remove(dct[r] -> data_ -> parent -> parent -> waiting_list[rr]);
+        }
+        if(dct[r] -> data_ -> parent -> parent -> process -> get_name() == pro_name) {
+            if (dct[r] -> data_ -> parent -> parent -> waiting_list.size() == 0) {
+                dct[r] -> data_ -> parent -> parent -> process = nullptr;
+            } else {
+                dct[r] -> data_ -> parent -> parent -> process = nullptr;
+                dct[r] -> data_ -> parent -> parent -> process = dct[r] -> data_ -> parent -> parent -> waiting_list.first() -> data_;
+                dct[r] -> data_ -> parent -> parent -> waiting_list.dequeue(); 
+            }
+
+            cout << GREEN << "回收" << dc_name << "成功！" << WHITE << endl;            
+        } else {
+            cout << GREEN << "回收" << dc_name << "成功！" << WHITE << endl;  
+        }
+    } else {
+        cout << GREEN << "回收" << dc_name << "成功！" << WHITE << endl;  
+    }
+
+}
+
+void Mgmt::dele_dc() {
+    string n;
+    cout << "请输入要删除的设备名:" << endl << "> ";
+    cin >> n;
+    int r = dct.find(n);
+    if (dct[r] -> data_ -> process != nullptr) {
+        cout << RED << "设备正在被使用，删除失败！" << WHITE << endl;
+        return;
+    }
+
+    if (dct[r] -> data_ -> process == nullptr) {
+        if (dct[r] -> data_ -> parent -> childs.size() == 1) {
+            if (dct[r] -> data_ -> parent -> process == nullptr) {
+                int k = coct.find(dct[r] -> data_ -> parent -> get_name());
+                dct.remove(dct[r]);
+                int idx = 0;
+                for (auto it : coct[k] -> data_ -> parent -> childs) {
+                    idx++;
+                    if (it -> get_name() == coct[k] -> data_ -> get_name()) {
+                        break;
+                    } 
+                }
+                coct[k] -> data_ -> parent -> childs.erase(coct[k] -> data_ -> parent -> childs.begin() + (idx - 1));
+                coct.remove(coct[k]);
+                cout << GREEN << "删除设备成功！" << WHITE << endl;
+            }
+        } else {
+            int idx = 0;
+            for (auto it :  dct[r] -> data_ -> parent -> childs) {
+                idx++;
+                if (it -> get_name() == dct[r] -> data_ -> get_name()) {
+                    break;
+                } 
+            }
+            dct[r] -> data_ -> parent -> childs.erase(dct[r] -> data_ -> parent -> childs.begin() + (idx - 1));
+            dct.remove(dct[r]);
+            cout << GREEN << "删除设备成功！" << WHITE << endl;
+        }
+    }
+}
+
+void Mgmt::apply_for_the_same_type() {
+    cout << "请输入要申请的设备类型:" << endl << "> ";
+    char type;
+    cin >> type;
+    int rank = 0;
+    for(; rank < dct.size(); ++rank) {
+        if (dct[rank] -> data_ -> get_type() == type && dct[rank] -> data_ -> process == nullptr) {
+            break;
+        }
+    }
+    if (rank == dct.size()) {
+        cout << RED << "没有空闲设备！"  << WHITE << endl;
+        return;
+    }
+    apply(dct[rank] -> data_ -> get_name());
+}
+
+void Mgmt::terminate() {
+    cout << "请输入想要撤销的进程名" << endl << "> ";
+    string name;
+    cin >> name;
+    for (int i =0; i < dct.size(); ++i) {
+        if (dct[i] -> data_ -> process != nullptr) {
+            if (dct[i] -> data_ -> process -> get_name() == name) {
+                release(dct[i] -> data_ -> get_name());
+            }
+        }
+    }
+    if (ready.check(name)) {
+        int r = ready.find(name);
+        ready.remove(ready[r]);
+        cout << GREEN << "撤销进程成功！" << WHITE << endl;
+    }
 }
 
 void Mgmt::show_allocation() {
@@ -294,17 +454,32 @@ int main(int argc, char *argv[]) {
     m.helper();
     cout << endl;
     char c;
+    string dc_name;
+    string n;
     while(1) {
         cout << endl << GREEN <<"m0dulo@DEVICE-MGMT-HLJU-OS" << WHITE << ":" << BLUE << "~" << WHITE;
         cout << "$ ";
         cin >> c;
         switch(c) {
-            case 'r':m.release();break;
-            case 'a':m.apply();break;
+            case 't':m.terminate();break;
+            case 'd':m.dele_dc();break;
+            case 'i':m.apply_for_the_same_type();break;
+            case 'r': {
+                cout << "请输入要释放的设备名:" << endl << "> ";
+                cin >> n;
+                m.release(n);
+                break;
+            }
+            case 'a':{
+                cout << "请输入所申请的设备名:" << endl << "> ";
+                cin >> dc_name;
+                m.apply(dc_name);
+                break;
+            }
             case 'q':exit(0);break;
             case 'c':m.add_dc();break;
             case 's':m.show_allocation();break;
-            case 'h':m.helper();cout << endl;break;
+            case 'h':m.helper();cout << endl;break; 
             case 'k':m.show_pcb_state();break;
             default:cout << "命令错误，请重新输入！" << endl;continue;
         }

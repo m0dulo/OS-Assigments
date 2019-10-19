@@ -16,7 +16,7 @@ private:
 
 public:
     Pcb *process = nullptr;
-    List<Pcb *> waiting_list;
+    Queue<Pcb*> waiting_list;
     void init(std::string n) {
         this -> node_name = n;
     }
@@ -59,7 +59,7 @@ class DcNode;
 
 class ChNode : public Node {
 public:
-    std::vector<CoNode *> childs;
+    std::vector<CoNode*> childs;
 
     void add_child(CoNode &n) {
         CoNode *ptr = nullptr;

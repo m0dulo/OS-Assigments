@@ -6,14 +6,15 @@
 #include "nodes.h"
 #include <set>
 
+
 class Mgmt {
 private:
-    List<ChNode *> chct;
-    List<CoNode *> coct;
-    List<DcNode *> dct;
+    List<ChNode*> chct;
+    List<CoNode*> coct;
+    List<DcNode*> dct;
 
-    List<Pcb *> ready;
-    List<Pcb *> blocking;
+    List<Pcb*> ready;
+    List<Pcb*> blocking;
 public:
     void init();
     void helper();
@@ -22,8 +23,11 @@ public:
     void add_dc();
     void add_co();
     void add_ch();
-    void apply();
-    void release();
+    void dele_dc();
+    void apply(std::string dc_name);
+    void release(std::string n);
+    void apply_for_the_same_type();
+    void terminate();
 };
 
 
