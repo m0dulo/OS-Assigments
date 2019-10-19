@@ -6,13 +6,13 @@
 #include "list.h"
 
 template <typename T>
-void List<T>::remove(ListNode<T> *p) {
+T &List<T>::remove(ListNode<T> *p) {
     T e = p -> data_;
     p -> pred_ -> succ_ = p -> succ_;
     p -> succ_ -> pred_ = p -> pred_;
     delete p;
     size_--;
-    //return e;
+    return e;
 }
 
 

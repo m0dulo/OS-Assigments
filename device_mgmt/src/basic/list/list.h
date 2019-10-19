@@ -37,7 +37,7 @@ public:
         return trailer_ -> pred_;
     }
 
-    T &dfirst()const {
+    T &front()const {
         return  header_ -> succ_ -> data_;
     }
 
@@ -51,10 +51,12 @@ public:
     ListNode<T> *insertAsFirst(T const &e);
     ListNode<T> *push_back(T const &e);
 
+    ListNode<T> *push(T *e);
+
     ListNode<T> *insertAfter(ListNode<T> *p, T const &e);
     ListNode<T> *insertBefore(ListNode<T> *p, T const &e);
 
-    void remove(ListNode<T> *p);
+    T &remove(ListNode<T> *p);
 
     ListNode<T> *search_size(int n, ListNode<T> *p) const;
     ListNode<T> *search_addr(int n, ListNode<T> *p) const;
@@ -64,8 +66,6 @@ public:
     void sort(int flag);
 
     int find(std::string) const;
-
-
 
 };
 

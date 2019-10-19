@@ -8,7 +8,6 @@
 
 template <typename T>
 void List<T>::init() {
-
     header_ = new ListNode<T>;
     trailer_ = new ListNode<T>;
 
