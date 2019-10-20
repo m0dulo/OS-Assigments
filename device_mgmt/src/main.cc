@@ -9,6 +9,7 @@
 #define BLUE "\033[34m"
 #define MAGENTA "\033[35m"  
 #define YELLOW "\033[33m"
+#define CYAN "\033[0;36m"
 
 using namespace std;
 
@@ -24,12 +25,14 @@ void Mgmt::helper() {
     cout<<"\t|t.撤销进程------------------命令:t|"<<endl;
     cout<<"\t|k.进程状态------------------命令:k|"<<endl;
     cout<<"\t|s.分配状态------------------命令:s|"<<endl;
+    cout<<"\t|p.树形打印------------------命令:p|"<<endl;
     cout<<"\t|h.显示帮助------------------命令:h|"<<endl;
     cout<<"\t|q.退出程序------------------命令:q|"<<endl;
     cout <<"\t===================================="<<endl;
 }
 
 void Mgmt::init() {
+    cpu -> init("CPU");
     ChNode *ch = new ChNode[2];
     for (int i = 0; i < 2; ++i) {
         string idx = to_string(i + 1);
@@ -83,6 +86,9 @@ void Mgmt::init() {
     
     dct[3] ->data_->set_parent(*coct[2]-> data_);
     coct[2]->data_->add_child(*dct[3] ->data_);
+
+    cpu ->add_child(*chct[0] -> data_);
+    cpu -> add_child(*chct[1] -> data_);
 }
 
 void Mgmt::add_dc() {
@@ -448,6 +454,50 @@ void Mgmt::show_pcb_state() {
     cout << endl;
 }
 
+void Mgmt::process_print(Node *node, int blk) {
+    cout << "   ";
+    if (node -> process == nullptr) {
+        cout << "|—<" << "none" << ">" << endl;
+    } else if (node -> process != nullptr) {
+        cout << "|—<" << node -> process ->get_name() << ">" << endl;
+    }
+}
+
+void Mgmt::tree_print(Node *node, int blk) {
+    for (int i = 0; i < blk; ++i) {
+        cout << "   ";
+    }
+    switch(node -> get_rank()) {
+        case 0:cout << "|—<" << node ->get_name() << ">" << endl;break;
+        case 1:cout << "|—<" << RED << "通道 " << node ->get_name() << WHITE << ">" << endl;break;
+        case 2:cout << "|—<" << GREEN << "控制器 "  << node ->get_name() << WHITE << ">"  << endl;break;
+        case 3:cout << "|—<" << CYAN << "设备 " << node ->get_name() << WHITE << ">" << endl;break;
+    }
+    if (node -> get_rank() != 0) {
+        for (int i = 0; i < blk + 1; ++i)
+            cout << "   ";
+        if (node -> process == nullptr) {
+            cout << "|—<" << YELLOW << "占用进程 " << "none" << WHITE ">" << endl;
+        } else if (node -> process != nullptr) {
+            cout << "|—<" << YELLOW << "占用进程 " << node -> process -> get_name() << WHITE ">" << endl;
+        }
+        for (int i = 0; i < blk + 1; ++i)
+            cout << "   ";
+        if (node -> waiting_list.size() == 0) {
+            cout << "|—<" << YELLOW << "等待进程 " << "none" << WHITE ">" << endl;
+        } else if (node -> waiting_list.size() > 0) {
+            cout << "|—<" << YELLOW << "等待进程 ";
+            for (int r = 0; r < node -> waiting_list.size(); ++r) {
+                cout <<  node -> waiting_list[r] -> data_ -> get_name() << " ";
+            }
+            cout << WHITE << ">" <<  endl;
+        }
+    }
+    for (int j = 0; j < node -> childs.size(); ++j) {
+        tree_print(node -> childs[j], blk + 1);
+    }
+}
+
 int main(int argc, char *argv[]) {
     Mgmt m;
     m.init();
@@ -461,6 +511,7 @@ int main(int argc, char *argv[]) {
         cout << "$ ";
         cin >> c;
         switch(c) {
+            case 'p':m.tree_print(m.cpu,0);break;
             case 't':m.terminate();break;
             case 'd':m.dele_dc();break;
             case 'i':m.apply_for_the_same_type();break;

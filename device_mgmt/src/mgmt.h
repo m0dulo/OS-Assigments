@@ -16,6 +16,7 @@ private:
     List<Pcb*> ready;
     List<Pcb*> blocking;
 public:
+    Node *cpu = new Node;
     void init();
     void helper();
     void show_allocation();
@@ -28,6 +29,8 @@ public:
     void release(std::string n);
     void apply_for_the_same_type();
     void terminate();
+    void tree_print(Node *node, int blk);
+    void process_print(Node *node, int blk);
 };
 
 

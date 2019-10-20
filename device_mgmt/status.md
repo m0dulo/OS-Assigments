@@ -511,7 +511,7 @@ digraph G {
 }
 ```
 
-# r P1 KB
+# r KB
 
 ```dot
 digraph G {
@@ -852,7 +852,7 @@ digraph G {
 }
 ```
 
-# r p3 MOUSE
+# r MOUSE
 
 ```dot
 digraph G {
@@ -1109,7 +1109,7 @@ digraph G {
 }
 ```
 
-# c m0dulo I CO4 CH1
+# c m0dulo I  Y CO4 CH1
 
 ```dot
 digraph G {
@@ -1210,7 +1210,7 @@ digraph G {
     m0dulo -> m0duloB
 }
 ```
-# i P7 I
+# i I P7
 
 ```dot
 digraph G {

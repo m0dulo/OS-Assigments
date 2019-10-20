@@ -12,13 +12,27 @@
 class Node {
 private:
     std::string node_name;
+protected:
     int rank = 0;
-
+    char type = '\0';
 public:
+    bool is_dc() {
+        if (type != '\0')
+            return true;
+        else
+            return false;    
+    } 
+    std::vector<Node*> childs;
     Pcb *process = nullptr;
     Queue<Pcb*> waiting_list;
     void init(std::string n) {
         this -> node_name = n;
+    }
+
+    void add_child(Node &n) {
+        Node *ptr = nullptr;
+        childs.push_back(ptr);
+        childs[childs.size() - 1]  = &n;
     }
 
     void set_rank(int r) {
@@ -52,6 +66,10 @@ public:
         }
     }
 
+    virtual int get_rank() {
+        return rank;
+    }
+
 };
 
 class CoNode;
@@ -59,37 +77,30 @@ class DcNode;
 
 class ChNode : public Node {
 public:
-    std::vector<CoNode*> childs;
-
-    void add_child(CoNode &n) {
-        CoNode *ptr = nullptr;
-        childs.push_back(ptr);
-        childs[childs.size() - 1]  = &n;
+    ChNode() {rank = 1;}
+    int get_rank() {
+        return rank;
     }
 };
 
 class CoNode : public Node {
 public:
+    CoNode() {rank = 2;}
     ChNode *parent = nullptr;
-    std::vector<DcNode *> childs;
-
-    void add_child(DcNode &n) {
-        DcNode *ptr = nullptr;
-        childs.push_back(ptr);
-        childs[childs.size() - 1]  = &n;
-    }
 
     void set_parent(ChNode &n) {
         parent = &n;
+    }
+    int get_rank() {
+        return rank;
     }
 
 };
 
 class DcNode : public Node {
-private:
-    char type = '\0';
 public:
     CoNode *parent = nullptr;
+    DcNode() {rank = 3;}
 
     void set_type(char t) {
         type = t;
@@ -101,6 +112,9 @@ public:
 
     void set_parent(CoNode &n) {
         parent = &n;
+    }
+    int get_rank() {
+        return rank;
     }
 };
 
