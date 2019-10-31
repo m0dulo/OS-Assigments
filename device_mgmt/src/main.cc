@@ -1,7 +1,7 @@
 #include "mgmt.h"
 #include <iostream>
-
 #include <string>
+#include "Argument_helper.h"
 
 #define RED "\033[31m"
 #define WHITE "\033[37m"
@@ -10,6 +10,9 @@
 #define MAGENTA "\033[35m"  
 #define YELLOW "\033[33m"
 #define CYAN "\033[0;36m"
+#define LIGHT_RED "\033[1;31m"
+#define LIGHT_GREEN "\033[1;32m"
+#define LIGHT_PURPLE "\033[1;35m"
 
 using namespace std;
 
@@ -454,15 +457,6 @@ void Mgmt::show_pcb_state() {
     cout << endl;
 }
 
-void Mgmt::process_print(Node *node, int blk) {
-    cout << "   ";
-    if (node -> process == nullptr) {
-        cout << "|—<" << "none" << ">" << endl;
-    } else if (node -> process != nullptr) {
-        cout << "|—<" << node -> process ->get_name() << ">" << endl;
-    }
-}
-
 void Mgmt::tree_print(Node *node, int blk) {
     for (int i = 0; i < blk; ++i) {
         cout << "   ";
@@ -471,7 +465,7 @@ void Mgmt::tree_print(Node *node, int blk) {
         case 0:cout << "|—<" << node ->get_name() << ">" << endl;break;
         case 1:cout << "|—<" << RED << "通道 " << node ->get_name() << WHITE << ">" << endl;break;
         case 2:cout << "|—<" << GREEN << "控制器 "  << node ->get_name() << WHITE << ">"  << endl;break;
-        case 3:cout << "|—<" << CYAN << "设备 " << node ->get_name() << WHITE << ">" << endl;break;
+        case 3:cout << "|—<" << CYAN << "设备 " << node ->get_name() << "(" << WHITE << node -> get_type() << CYAN << ")" << WHITE << ">" << endl;break;
     }
     if (node -> get_rank() != 0) {
         for (int i = 0; i < blk + 1; ++i)
@@ -479,16 +473,17 @@ void Mgmt::tree_print(Node *node, int blk) {
         if (node -> process == nullptr) {
             cout << "|—<" << YELLOW << "占用进程 " << "none" << WHITE ">" << endl;
         } else if (node -> process != nullptr) {
-            cout << "|—<" << YELLOW << "占用进程 " << node -> process -> get_name() << WHITE ">" << endl;
+            cout << "|—<" << YELLOW << "占用进程 ";
+            cout << LIGHT_RED << node -> process -> get_name() << WHITE ">" << endl;
         }
         for (int i = 0; i < blk + 1; ++i)
             cout << "   ";
         if (node -> waiting_list.size() == 0) {
             cout << "|—<" << YELLOW << "等待进程 " << "none" << WHITE ">" << endl;
         } else if (node -> waiting_list.size() > 0) {
-            cout << "|—<" << YELLOW << "等待进程 ";
+            cout << "|—<" << YELLOW << "等待进程 " << WHITE;
             for (int r = 0; r < node -> waiting_list.size(); ++r) {
-                cout <<  node -> waiting_list[r] -> data_ -> get_name() << " ";
+                cout <<  LIGHT_PURPLE << node -> waiting_list[r] -> data_ -> get_name() << " ";
             }
             cout << WHITE << ">" <<  endl;
         }
@@ -498,19 +493,35 @@ void Mgmt::tree_print(Node *node, int blk) {
     }
 }
 
+bool Mgmt::is_in_dct(string dc_name) {
+    if (dct.check(dc_name))
+        return true;
+    else 
+        return false;
+}
+
 int main(int argc, char *argv[]) {
     Mgmt m;
-    m.init();
-    m.helper();
     cout << endl;
-    char c;
+    char cmd;
     string dc_name;
     string n;
+    bool b_help = false;
+    dsr::Argument_helper ah;
+    ah.new_flag("h", "help", "argument helper", b_help);
+    ah.process(argc, argv);
+    if (b_help) {
+        m.helper();
+        return 0;
+    }
+    m.init();
+    m.helper();
+    cout << GREEN << "\t初始化设备已完成！请输入\'p\'命令查看~~" << WHITE << endl;
     while(1) {
-        cout << endl << GREEN <<"m0dulo@DEVICE-MGMT-HLJU-OS" << WHITE << ":" << BLUE << "~" << WHITE;
+        cout << endl << GREEN <<"lyx@device_mgmt-hlju-os" << WHITE << ":" << BLUE << "~" << WHITE;
         cout << "$ ";
-        cin >> c;
-        switch(c) {
+        cin >> cmd;
+        switch(cmd) {
             case 'p':m.tree_print(m.cpu,0);break;
             case 't':m.terminate();break;
             case 'd':m.dele_dc();break;
@@ -518,14 +529,25 @@ int main(int argc, char *argv[]) {
             case 'r': {
                 cout << "请输入要释放的设备名:" << endl << "> ";
                 cin >> n;
-                m.release(n);
-                break;
+                if (!m.is_in_dct(n)) {
+                    cout << RED << "没有此设备！释放设备失败！" << WHITE;
+                    continue;
+                } else {
+                    m.release(n);
+                    break; 
+                }  
             }
             case 'a':{
                 cout << "请输入所申请的设备名:" << endl << "> ";
                 cin >> dc_name;
-                m.apply(dc_name);
-                break;
+                if (!m.is_in_dct(dc_name)) {
+                    cout << RED << "没有此设备！申请设备失败！" << WHITE;
+                    continue;
+                } else {
+                    m.apply(dc_name);
+                    break;
+                }
+                
             }
             case 'q':exit(0);break;
             case 'c':m.add_dc();break;

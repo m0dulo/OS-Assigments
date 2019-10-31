@@ -7,11 +7,11 @@
 #include <string>
 
 struct Fcb{
-    char name_[5];
+    char name_[8];
     int size_;
     int first_block_;
-    int type_ = 0;
-    char date_time_[10];
+    char type_ = 0;
+    char date_time_[15];
 };
 
 #endif // SRC_BASIC_FCB_H_

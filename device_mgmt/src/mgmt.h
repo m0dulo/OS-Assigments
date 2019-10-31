@@ -30,7 +30,7 @@ public:
     void apply_for_the_same_type();
     void terminate();
     void tree_print(Node *node, int blk);
-    void process_print(Node *node, int blk);
+    bool is_in_dct(std::string dc_name);
 };
 
 

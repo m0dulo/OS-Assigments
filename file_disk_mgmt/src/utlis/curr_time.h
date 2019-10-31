@@ -15,7 +15,7 @@ std:: string current_time() {
     struct tm tstruct;
     char *curr_time = (char *)malloc(sizeof(char) * FORMAT_MAX_SIZE);
     tstruct = *localtime(&now);
-    strftime(curr_time, sizeof(char) * FORMAT_MAX_SIZE, "%X", &tstruct);
+    strftime(curr_time, sizeof(char) * FORMAT_MAX_SIZE, "%m-%d %X", &tstruct);
     return curr_time;
 }
 
