@@ -8,5 +8,6 @@
 #include "split.h"
 #include "convert.h"
 #include "exists.h"
+#include "ini_reader.h"
 
 #endif // SRC_LYX_UTLIS_ALL_
