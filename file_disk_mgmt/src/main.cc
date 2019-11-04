@@ -105,7 +105,10 @@ void Mgmt::md(const char *dir_name) {
         return;
     }
     int path = get_path();
+    bool b_flag = false;
     for (i = 2; i < 32; ++i) {
+        if (!strcmp(block_[path].f[i].name_, dir_name))
+            b_flag = true;
         if (block_[path].f[i].type_ == 0) {
             break;
         }
@@ -114,6 +117,12 @@ void Mgmt::md(const char *dir_name) {
         cout<<"目录中文件达上限,无法创建"<<endl;
         return ;
     }
+
+    if (b_flag) {
+        cout << "该目录名已被使用，无法创建" << endl;
+        return;
+    }
+
     fat_[fat_idx] = 0xffff;
     block_[path].f[i].type_ = 2;
     block_[path].f[i].size_ = 0;
@@ -152,7 +161,10 @@ void Mgmt::mk(const char *name, int size) {
 
     int idx;
     int path = get_path();
+    bool b_flag = false;
     for (idx = 2; idx < 32; ++idx) {
+        if (!strcmp(block_[path].f[idx].name_, name))
+            b_flag = true;
         if (block_[path].f[idx].type_ == 0) {
             break;
         }
@@ -160,6 +172,11 @@ void Mgmt::mk(const char *name, int size) {
     if (idx == 32) {
         cout<<"目录中文件达上限,无法创建"<<endl;
         return ;
+    }
+
+    if (b_flag) {
+        cout << "改文件名已被使用，无法创建" << endl;
+        return;
     }
 
     if (block_num == 1) {
@@ -171,7 +188,7 @@ void Mgmt::mk(const char *name, int size) {
         strcpy(block_[first].f[0].date_time_, date.c_str()); 
     } else if (block_num > 1) {
         for (int j = first; j < (first + (block_num - 1)); ++j) {
-            fat_[j] = j + 1;
+            fat_[j] = (unsigned int)(j + 1);
             block_[j].f[0].size_= 1024;
             strcpy(block_[j].f[0].name_,name);
             block_[j].f[0].type_ = 1;
@@ -554,7 +571,6 @@ void Mgmt::check() {
 }
 
 int main(int argc, char *argv[]) {
-    cout << sizeof(Fcb) << endl;
     Mgmt m;
     m.check();
     while(m.run());
