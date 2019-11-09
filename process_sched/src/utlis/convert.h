@@ -22,6 +22,7 @@ struct upper_convert {
 
 void toupper(std::string &str) {
     std::for_each(str.begin(), str.end(), upper_convert());
+    //transform(str.begin(), str.end(), str.begin(), ::tolower);
 }
 
 }

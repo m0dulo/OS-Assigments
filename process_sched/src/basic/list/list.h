@@ -5,6 +5,8 @@
 
 #include "list_node.h"
 #include <string>
+#include <tuple>
+#include <vector>
 
 template <typename T> 
 class List {
@@ -16,9 +18,9 @@ protected:
 
     int size_ = 0;
     void init();
-    int clear();
 
 public:
+    int clear();
     List() { init(); }
     ~List() = default;
     int size() const { 
@@ -60,14 +62,18 @@ public:
 
     ListNode<T> *search_size(int n, ListNode<T> *p) const;
     ListNode<T> *search_addr(int n, ListNode<T> *p) const;
+    ListNode<T> *search_time(int n, ListNode<T> *p) const;
+    ListNode<T> *search_short(int n, ListNode<T> *p) const;
+
 
     bool check(std::string);
 
-    void sort(int flag);
+    void sort(std::string flag);
 
     int find(std::string) const;
     int find_type(std::string name) const;
 
+    std::tuple<int, std::vector<int>> find_pos(int i);
 };
 
 #endif // SRC_BASIC_LIST_H_
