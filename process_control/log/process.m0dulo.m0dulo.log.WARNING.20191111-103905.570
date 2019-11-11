@@ -1,0 +1,4 @@
+Log file created at: 2019/11/11 10:39:05
+Running on machine: m0dulo
+Log line format: [IWEF]mmdd hh:mm:ss.uuuuuu threadid file:line] msg
+E1111 10:39:05.848083   570 process.cc:76] 轮转失败！

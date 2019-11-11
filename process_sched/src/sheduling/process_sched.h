@@ -14,11 +14,17 @@ public:
     List<Pcb> ready_;
     List<Pcb> running_;
     List<Pcb> runned_;
+    List<Pcb> task_;
+    List<std::string> show_;
     Sched() = default;
     void init();
     void calc(Pcb *p, List<Pcb> list);
     void FCFS();
     void SJF();
-    void RR(int q);
+    void RR();
+    void show(std::string n);
+    void helper();
+    void clear();
+    void PS();
 };
 #endif // PROCESS_SCHED_H_

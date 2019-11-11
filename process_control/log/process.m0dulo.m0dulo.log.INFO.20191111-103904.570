@@ -1,0 +1,11 @@
+Log file created at: 2019/11/11 10:39:04
+Running on machine: m0dulo
+Log line format: [IWEF]mmdd hh:mm:ss.uuuuuu threadid file:line] msg
+I1111 10:39:04.210330   570 process.cc:61] 分配成功！
+E1111 10:39:05.848083   570 process.cc:76] 轮转失败！
+I1111 10:39:27.624182   570 process.cc:201] Output Format: Name(begin, end)
+I1111 10:39:27.624199   570 process.cc:202] Ready Queue: 
+I1111 10:39:27.624425   570 process.cc:214] Running Queue: 
+I1111 10:39:27.624440   570 process.cc:219] p0(0, 2) 
+I1111 10:39:27.624660   570 process.cc:226] Blocked Queue: 
+I1111 10:39:34.687341   570 process.cc:201] Output Format: Name(begin, end)

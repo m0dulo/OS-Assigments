@@ -41,7 +41,18 @@ ListNode<T> *List<T>::search_short(int n, ListNode<T> *p) const {
     T  &e = p -> data_;
     while(n-- >= 0) {
         p = p -> pred_;
-        if ((p -> data_.get_bur()) <= e.get_bur() && (p -> data_.get_arr()) < e.get_arr())
+        if (((p -> data_.get_arr()) < e.get_arr()) && ((p -> data_.get_bur()) < e.get_bur()))
+            break;
+    }
+    return p;
+}
+
+template <typename T>
+ListNode<T> *List<T>::search_priority(int n, ListNode<T> *p) const {
+    T  &e = p -> data_;
+    while(n-- >= 0) {
+        p = p -> pred_;
+        if (((p -> data_.get_priority()) < e.get_priority()))
             break;
     }
     return p;
@@ -83,6 +94,16 @@ void List<T>::sort(std::string flag) {
         ListNode<T> *p = first();
         for(int i = 0; i < size_; i++) {
             ListNode<T> *pos = search_short(i, p);
+            insertAfter(pos, p -> data_);
+            p = p -> succ_;
+            remove(p -> pred_);
+        }
+    }
+
+    else if (flag == "PS ORDERED") {
+        ListNode<T> *p = first();
+        for(int i = 0; i < size_; i++) {
+            ListNode<T> *pos = search_priority(i, p);
             insertAfter(pos, p -> data_);
             p = p -> succ_;
             remove(p -> pred_);

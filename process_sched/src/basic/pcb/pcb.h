@@ -8,6 +8,7 @@ private:
     int start_time_;
     int fini_time_;
     int runned_time_;
+    int priority_;
     double T_;
     double W_;
 
@@ -22,10 +23,11 @@ public:
         W_ = 0;
     }
 
-    void init(std::string name, int arr, int bur) {
+    void init(std::string name, int arr, int bur, int p) {
         name_ = name;
         arr_time_ = arr;
         bur_time_ = bur;
+        priority_ = p;
     }
 
     void set_start(int s) { start_time_ = s;}
@@ -33,8 +35,8 @@ public:
     void set_runned(int r) { runned_time_ = r;}
     void set_T(double t) { T_ = t;}
     void set_W(double w) { W_ = w;}
-    void run() { runned_time_++; }
-
+    void run() { runned_time_++; priority_--;}
+    void wait() {priority_++;}
     
     std::string get_name() { return name_;}
     int get_arr() {return arr_time_;}
@@ -42,6 +44,7 @@ public:
     int get_fini() { return fini_time_;}
     int get_start() {return start_time_;}
     int get_runned() { return runned_time_;}
+    int get_priority() { return priority_;}
     double get_T() {return T_;}
     double get_W() { return W_;}
 

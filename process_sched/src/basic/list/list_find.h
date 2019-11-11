@@ -7,11 +7,12 @@
 template <typename T> 
 
 bool List<T>::check(std::string name)  {
+    if (size_ == 0) return false;
     if (size_ > 0) {
         int rank = 0;
         int flag = 0;
         for (; rank < size(); rank++) {
-            if(name == (*this)[rank] -> data_->get_name()) {
+            if(name == (*this)[rank] -> data_) {
                 flag = 1;
                 break;
             }

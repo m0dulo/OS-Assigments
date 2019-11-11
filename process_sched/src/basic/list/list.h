@@ -64,6 +64,7 @@ public:
     ListNode<T> *search_addr(int n, ListNode<T> *p) const;
     ListNode<T> *search_time(int n, ListNode<T> *p) const;
     ListNode<T> *search_short(int n, ListNode<T> *p) const;
+    ListNode<T> *search_priority(int n, ListNode<T> *p) const;
 
 
     bool check(std::string);
